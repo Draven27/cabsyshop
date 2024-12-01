@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabsy Online Electronics 1-B Kayak Shop</title>
+    <!-- Include Font Awesome for the cart icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Include Google Font for Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background: linear-gradient(to right, #007BFF, #0056b3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        header img {
+            width: 100px; /* Adjust the width as needed */
+            height: auto;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+        header h1 {
+            margin: 0;
+        }
+        main {
+            padding: 20px;
+        }
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            background-color: white;
+            width: 300px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .product h4 {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .product p {
+            margin: 5px 0;
+        }
+        .product .quantity {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .product button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .product button:hover {
+            background-color: #0056b3;
+        }
+        #cart {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        #checkout-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #checkout-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        footer {
+            background: linear-gradient(to right, #0056b3, #007BFF);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        #cart-icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+        #cart-icon span {
+            background-color: red;
+            border-radius: 50%;
+            padding: 2px 8px;
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+        .thank-you-message {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo image added here -->
+        <img src="logo.jpg" alt="Cabsy Logo">
+        <h1>Cabsy Online Electronics 1-B Kayak Shop</h1>
+        <p>Your trusted online electronics store!</p>
+        <div id="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-item-count">0</span>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <h2>Products</h2>
+        <div class="product-container" id="products"></div>
+
+        <div id="cart">
+            <h3>Your Cart</h3>
+            <ul id="cart-items"></ul>
+            <p id="total-price">Total: 0 PHP</p>
+            <p id="shipping-fee"></p>
+            <button id="checkout-btn" disabled>Proceed to Checkout</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>Email: <a href="mailto:cabsyonlinelectronicsho@gmail.com">cabsyonlinelectronicsho@gmail.com</a></p>
+        <p>Phone: 09065812153</p>
+        <p>&copy; 2024 Cabsy Online Electronics 1-B Kayak Shop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const products = [
+            { name: "35pcs Resistor", price: 35, image: "resistor.jpg" },
+            { name: "2pcs 50V 4700UF Capacitor 18X35mm High Frequency Aluminum Electrolytic Capacitors for TV, LCD Monitor", price: 50, image: "Capacitor.jpg" },
+            { name: "180pcs Transistor Set Kit", price: 140, image: "transistor.jpg" },
+            { name: "10pcs/set 10A10 AMP SILICON RECTIFIERS Rectifier Diode R-6 DO-27", price: 70, image: "Rectifier Diode.jpg" },
+            { name: "12V 10A Electronic Transformer", price: 130, image: "electronic transformer.jpg" },
+            { name: "4216 Piezo Electric Buzzer", price: 30, image: "Piezo Electric Buzzer.jpg" },
+            { name: "50pcs Car Fuse Assortment Set Profile Middle Size Blade Type Fuse Auto Car Truck 2-35A Fuse with Box Clip", price: 65, image: "50pcs Car Fuse Assortment Set Profile Middle Size Blade Type Fuse Auto Car Truck 2-35A Fuse with Box Clip.jpg" },
+            { name: "Motorcycle Battery (DayWay) L7xW11xH9cm 4L size", price: 340, image: "Motorcycle Battery (DayWay) L7xW11xH9cm 4L size.jpg" },
+            { name: "Allan Soldering lead 1 roll approx: 4.5 meters long 1mm thickness 60/40 Solder Electronics", price: 150, image: "Allan Soldering lead.jpg" },
+            { name: "UPSPIRIT 60W Soldering Iron Adjustable Temperature Solder Rework Station 220V (New Version)", price: 150, image: "UPSPIRIT 60W Soldering Iron Adjustable Temperature Solder Rework Station 220V (New Version).jpg" }
+        ];
+
+        const cart = [];
+        const shippingFee = 55;
+
+        function displayProducts() {
+            const productsDiv = document.getElementById("products");
+            products.forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.className = "product";
+                let productHTML = `
+                    <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; border-radius: 5px;">
+                    <h4>${product.name}</h4>
+                    <p>${product.price} PHP</p>
+                    <div class="quantity">
+                        <button onclick="changeQuantity('${product.name}', -1)">-</button>
+                        <span id="quantity-${product.name}">0</span>
+                        <button onclick="changeQuantity('${product.name}', 1)">+</button>
+                    </div>
+                `;
+                productDiv.innerHTML = productHTML;
+                productsDiv.appendChild(productDiv);
+            });
+        }
+
+        function changeQuantity(productName, change) {
+            const product = cart.find(p => p.name === productName);
+
+            if (!product && change > 0) {
+                const productData = products.find(p => p.name === productName);
+                cart.push({ name: productData.name, quantity: 1, price: productData.price });
+            } else {
+                const productIndex = cart.findIndex(p => p.name === productName);
+                if (cart[productIndex].quantity + change < 0) return;
+
+                cart[productIndex].quantity += change;
+
+                if (cart[productIndex].quantity === 0) {
+                    cart.splice(productIndex, 1);
+                }
+            }
+
+            document.getElementById(`quantity-${productName}`).textContent = cart.find(p => p.name === productName)?.quantity || 0;
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsList = document.getElementById("cart-items");
+            const totalPriceElement = document.getElementById("total-price");
+            const shippingFeeElement = document.getElementById("shipping-fee");
+            const checkoutBtn = document.getElementById("checkout-btn");
+            const cartItemCount = document.getElementById("cart-item-count");
+
+            cartItemsList.innerHTML = "";
+            let total = 0;
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                const listItem = document.createElement("li");
+                listItem.textContent = `${item.name} x ${item.quantity} - ${item.price * item.quantity} PHP`;
+                cartItemsList.appendChild(listItem);
+            });
+
+            cartItemCount.textContent = cart.length;
+
+            if (total >= 100) {
+                shippingFeeElement.textContent = `Shipping Fee: ${shippingFee} PHP`;
+                total += shippingFee;
+                checkoutBtn.disabled = false;
+            } else {
+                shippingFeeElement.textContent = "Minimum order is 100 PHP.";
+                checkoutBtn.disabled = true;
+            }
+
+            totalPriceElement.textContent = `Total: ${total} PHP`;
+        }
+
+        function confirmCheckout() {
+            const proceed = confirm("You want to proceed?");
+            if (proceed) checkout();
+        }
+
+        function checkout() {
+            document.getElementById("main-content").innerHTML = ` 
+                <header>
+                    <h1>Checkout</h1>
+                </header>
+                <form onsubmit="return validateCheckout()">
+                    <label>Full Name: <input type="text" id="full-name" required></label><br><br>
+                    <label>Address: <input type="text" required></label><br><br>
+                    <label>Contact Number: <input type="text" id="contact" required></label><br><br>
+                    <label>Payment Method: 
+                        <select id="payment-method">
+                            <option value="COD" selected>Cash on Delivery (COD)</option>
+                        </select>
+                    </label><br><br>
+                    <button type="submit">Place Order</button>
+                    <button type="button" onclick="goBack()">Back</button>
+                </form>
+            `;
+        }
+
+        function goBack() {
+            location.reload();
+        }
+
+        function validateCheckout() {
+            const contact = document.getElementById("contact").value;
+            const fullName = document.getElementById("full-name").value;
+            if (!/^\d+$/.test(contact)) {
+                alert("Please enter your correct number.");
+                return false;
+            }
+            if (fullName.trim() === "") {
+                alert("Please enter your full name.");
+                return false;
+            }
+
+            // Show thank you message and reload the page
+            document.getElementById("main-content").innerHTML = `
+                <div class="thank-you-message">
+                    Thank you for your order! You will be redirected back to the product selection page.
+                </div>
+            `;
+            
+            setTimeout(() => location.reload(), 3000); // Automatically reload the page after 3 seconds
+            
+            return true;
+        }
+
+        document.getElementById("checkout-btn").addEventListener("click", confirmCheckout);
+
+        displayProducts();
+    </script>
+</body>
+</html>
